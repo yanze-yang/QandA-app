@@ -118,7 +118,7 @@ const QuestionPage: FC<Props> = ({
                 validationRules={{
                   content: [
                     { validator: required },
-                    { validator: minLength, arg: 50 },
+                    { validator: minLength, arg: 5 },
                   ],
                 }}
                 onSubmit={handleSubmit}
