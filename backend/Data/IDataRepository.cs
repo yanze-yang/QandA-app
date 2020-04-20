@@ -1,8 +1,5 @@
-﻿using System;
+﻿using QandA.Data.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using QandA.Data.Models;
 
 namespace QandA.Data
 {
