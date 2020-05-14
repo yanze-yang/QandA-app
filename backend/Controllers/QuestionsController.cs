@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QandA.Data;
 using QandA.Data.Models;
+using Microsoft.AspNetCore.SignalR;
+using QandA.Hubs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,10 +17,12 @@ namespace QandA.Controllers
     public class QuestionsController : ControllerBase
     {
         private readonly IDataRepository _dataRepository;
+        private readonly IHubContext<QuestionsHub> _questionHubContext;
 
-        public QuestionsController(IDataRepository dataRepository)
+        public QuestionsController(IDataRepository dataRepository, IHubContext<QuestionsHub> questionHubContext)
         {
             _dataRepository = dataRepository;
+            _questionHubContext = questionHubContext;
         }
 
         [HttpGet]
@@ -96,8 +100,7 @@ namespace QandA.Controllers
         [HttpPost("answer")]
         public ActionResult<AnswerGetResponse> PostAnswer(AnswerPostRequest answerPostRequest)
         {
-            var questionExists =
-           _dataRepository.QuestionExists(answerPostRequest.QuestionId.Value);
+            var questionExists = _dataRepository.QuestionExists(answerPostRequest.QuestionId.Value);
             if (!questionExists)
             {
                 return NotFound();
@@ -110,6 +113,9 @@ namespace QandA.Controllers
                 UserName = "bob.test@test.com",
                 Created = DateTime.UtcNow
             });
+
+            _questionHubContext.Clients.Group($"Question-{answerPostRequest.QuestionId.Value}").SendAsync("ReceiveQuestion", _dataRepository.GetQuestion(answerPostRequest.QuestionId.Value));
+
             return savedAnswer;
         }
     }
