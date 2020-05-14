@@ -1,33 +1,24 @@
-import { FC, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Page } from './Page';
 import { QuestionList } from './QuestionList';
-import { QuestionData } from './QuestionsData';
+import { searchQuestions, QuestionData } from './QuestionsData';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { searchQuestionsActionCreator, AppState } from './Store';
 
-interface Props extends RouteComponentProps {
-  searchQuestions: (criteria: string) => Promise<void>;
-  questions: QuestionData[] | null;
-  questionLoading: boolean;
-}
+export const SearchPage: FC<RouteComponentProps> = ({ location }) => {
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
 
-const SearchPage: FC<Props> = ({
-  location,
-  searchQuestions,
-  questions,
-  questionLoading,
-}) => {
   const searchParams = new URLSearchParams(location.search);
   const search = searchParams.get('criteria') || '';
 
   useEffect(() => {
-    searchQuestions(search);
-  }, [search, searchQuestions]);
+    const doSearch = async (criteria: string) => {
+      const foundResults = await searchQuestions(criteria);
+      setQuestions(foundResults);
+    };
+    doSearch(search);
+  }, [search]);
 
   return (
     <Page title="Search Results">
@@ -42,26 +33,7 @@ const SearchPage: FC<Props> = ({
           for "{search}"
         </p>
       )}
-      <QuestionList data={questions || []} />
+      <QuestionList data={questions} />
     </Page>
   );
 };
-
-const mapStateToProps = (store: AppState) => {
-  return {
-    questions: store.questions.searched,
-    questionLoading: store.questions.loading,
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    searchQuestions: (criteria: string) =>
-      dispatch(searchQuestionsActionCreator(criteria)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SearchPage);
