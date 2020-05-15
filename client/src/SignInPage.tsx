@@ -13,7 +13,13 @@ export const SignInPage: FC<Props> = ({ action }) => {
   const { signIn } = useAuth();
 
   if (action === 'signin') {
-    signIn();
+    return (
+      <Page title="Sign In">
+        <StatusText>Signing in ...</StatusText>
+      </Page>
+    );
+
+    // signIn();
   }
 
   return (
