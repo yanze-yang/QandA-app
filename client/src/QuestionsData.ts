@@ -1,5 +1,5 @@
 import { http } from './http';
-// import { getAccessToken } from './Auth';
+import { getAccessToken } from './Auth';
 
 export interface QuestionData {
   questionId: number;
@@ -101,13 +101,13 @@ export interface PostQuestionData {
 export const postQuestion = async (
   question: PostQuestionData,
 ): Promise<QuestionData | undefined> => {
-  // const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken();
   try {
     const result = await http<PostQuestionData, QuestionDataFromServer>({
       path: '/questions',
       method: 'post',
       body: question,
-      // accessToken,
+      accessToken,
     });
     if (result.ok && result.parsedBody) {
       return mapQuestionFromServer(result.parsedBody);
@@ -130,13 +130,13 @@ export interface PostAnswerData {
 export const postAnswer = async (
   answer: PostAnswerData,
 ): Promise<AnswerData | undefined> => {
-  // const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken();
   try {
     const result = await http<PostAnswerData, AnswerData>({
       path: '/questions/answer',
       method: 'post',
       body: answer,
-      // accessToken,
+      accessToken,
     });
     if (result.ok) {
       return result.parsedBody;

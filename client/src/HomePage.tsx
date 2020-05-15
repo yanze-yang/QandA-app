@@ -7,23 +7,32 @@ import { getUnansweredQuestions, QuestionData } from './QuestionsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
 import { RouteComponentProps } from 'react-router-dom';
+import { useAuth } from './Auth';
 
 export const HomePage: FC<RouteComponentProps> = ({ history }) => {
   const [questions, setQuestions] = useState<QuestionData[] | null>(null);
   const [questionsLoading, setQuestionsLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const doGetUnansweredQuestions = async () => {
       const unansweredQuestions = await getUnansweredQuestions();
-      setQuestions(unansweredQuestions);
-      setQuestionsLoading(false);
+      if (!cancelled) {
+        setQuestions(unansweredQuestions);
+        setQuestionsLoading(false);
+      }
     };
     doGetUnansweredQuestions();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleAskQuestionClick = () => {
     history.push('/ask');
   };
+
+  const { isAuthenticated } = useAuth();
 
   return (
     <Page>
@@ -35,9 +44,11 @@ export const HomePage: FC<RouteComponentProps> = ({ history }) => {
         `}
       >
         <PageTitle>Unanswered Questions</PageTitle>
-        <PrimaryButton onClick={handleAskQuestionClick}>
-          Ask a question
-        </PrimaryButton>
+        {isAuthenticated && (
+          <PrimaryButton onClick={handleAskQuestionClick}>
+            Ask a question
+          </PrimaryButton>
+        )}
       </div>
       {questionsLoading ? (
         <div
