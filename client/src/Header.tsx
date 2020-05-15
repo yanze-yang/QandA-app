@@ -65,7 +65,7 @@ export const Header: FC<RouteComponentProps> = ({ history, location }) => {
           text-decoration: none;
         `}
       >
-        Q & A
+        {process.env.REACT_APP_ENV || 'development'}Q & A
       </Link>
       <form onSubmit={handleSearchSubmit}>
         <input
