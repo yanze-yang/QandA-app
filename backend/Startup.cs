@@ -50,8 +50,10 @@ namespace QandA
 
             services.AddScoped<IDataRepository, DataRepository>();
 
+            var name = Configuration["Frontend"];
+
             services.AddCors(options => options.AddPolicy("CorsPolicy",
-                builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://qandaclient.azurewebsites.net").AllowCredentials()));
+                builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins(name).AllowCredentials()));
 
             services.AddSignalR();
 
