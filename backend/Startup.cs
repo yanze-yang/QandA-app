@@ -50,8 +50,10 @@ namespace QandA
 
             services.AddScoped<IDataRepository, DataRepository>();
 
+            var name = Configuration["Frontend"];
+
             services.AddCors(options => options.AddPolicy("CorsPolicy",
-                builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000").AllowCredentials()));
+                builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins(name).AllowCredentials()));
 
             services.AddSignalR();
 
