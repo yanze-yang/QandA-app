@@ -22,8 +22,8 @@ interface IAuth0Context {
 }
 export const Auth0Context = createContext<IAuth0Context>({
   isAuthenticated: false,
-  signIn: () => {},
-  signOut: () => {},
+  signIn: () => { },
+  signOut: () => { },
   loading: true,
 });
 

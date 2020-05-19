@@ -41,3 +41,16 @@ export const PrimaryButton = styled.button`
 export const StatusText = styled.div`
   text-align: center;
 `;
+
+export const TestAccountHeader = styled.div`
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0
+`;
+
+export const TestAccountText = styled.div`
+  text-align: center;
+  margin: 3px 0
+`;
+
+

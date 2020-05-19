@@ -65,7 +65,7 @@ export const Header: FC<RouteComponentProps> = ({ history, location }) => {
           text-decoration: none;
         `}
       >
-        {process.env.REACT_APP_ENV || 'development'}Q & A
+        Q & A
       </Link>
       <form onSubmit={handleSearchSubmit}>
         <input
@@ -103,11 +103,11 @@ export const Header: FC<RouteComponentProps> = ({ history, location }) => {
             </Link>
           </div>
         ) : (
-          <Link to="/signin" css={buttonStyle}>
-            <UserIcon />
-            <span>Sign In</span>
-          </Link>
-        ))}
+            <Link to="/signin" css={buttonStyle}>
+              <UserIcon />
+              <span>Sign In</span>
+            </Link>
+          ))}
     </div>
   );
 };
